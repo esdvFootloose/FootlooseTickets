@@ -11,6 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'TicketsController@index');
+Route::post('/api/reservations', 'ReservationsController@store');
