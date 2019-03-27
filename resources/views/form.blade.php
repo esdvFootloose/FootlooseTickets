@@ -1,19 +1,8 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Showcase Footloose tickets</title>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-</head>
-<body>
-<div class="container">
+@extends('layout')
+@section('content')
     <h1>Footloose Showcase Tickets</h1>
     <p>Purchase here your tickets for the footloose showcase. </p>
+
     <div class="card">
         <form method="POST" action="/api/reservations" class="card-body">
             @csrf
@@ -50,6 +39,4 @@
             <button class="btn btn-danger" type="submit" style="margin-top: 2em">Submit</button>
         </form>
     </div>
-</div>
-</body>
-</html>
+@endsection
