@@ -13,7 +13,7 @@
             </ul>
         </div>
     @endif
-    
+
     <div class="card">
         <form method="POST" action="/api/reservations" class="card-body">
             @csrf
@@ -41,7 +41,7 @@
                         <div class="form-group">
                             <label for="number-of-tickets-{{ $ticket->id }}">Number of tickets:</label>
                             <input type="number" class="form-control-input" name="ticket-{{ $ticket->id }}-number"
-                                   id="number-of-tickets-{{ $ticket->id }}">
+                                   id="number-of-tickets-{{ $ticket->id }}"> x €{{ $ticket->price }}
                         </div>
                     </div>
                 </div>
