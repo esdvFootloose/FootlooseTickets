@@ -3,6 +3,17 @@
     <h1>Footloose Showcase Tickets</h1>
     <p>Purchase here your tickets for the footloose showcase. </p>
 
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert" style="margin-top: 1em">
+            Please make sure:
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
     <div class="card">
         <form method="POST" action="/api/reservations" class="card-body">
             @csrf
@@ -40,14 +51,5 @@
         </form>
     </div>
 
-    @if ($errors->any())
-        <div class="alert alert-danger" role="alert" style="margin-top: 1em">
-            Please make sure:
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+
 @endsection
