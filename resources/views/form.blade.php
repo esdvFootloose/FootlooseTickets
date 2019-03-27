@@ -39,4 +39,15 @@
             <button class="btn btn-danger" type="submit" style="margin-top: 2em">Submit</button>
         </form>
     </div>
+
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert" style="margin-top: 1em">
+            Please make sure:
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 @endsection
