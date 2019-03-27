@@ -7,24 +7,25 @@
     <title>Showcase Footloose tickets</title>
 </head>
 <body>
+{{--{{ old() }}--}}
 <form method="POST" action="/api/reservations">
     @csrf
     <div>
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+        <input type="text" id="name" name="name" placeholder="Enter your name" value="{{ old('name')  }}" required>
     </div>
     <div>
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required>
     </div>
     @foreach($tickets as $ticket)
         <div>
-            <label for="ticket{{ $ticket->id }}">{{ $ticket->type }}</label>
-            <input type="checkbox" id="ticket{{ $ticket->id }}">
+            <label for="ticket-{{ $ticket->id }}">{{ $ticket->type }}</label>
+            <input type="checkbox" name="ticket-{{ $ticket->id }}" id="ticket-{{ $ticket->id }}">
         </div>
         <div>
-            <label for="number-of-tickets{{ $ticket->id }}">Number of tickets</label>
-            <input type="number" id="number-of-tickets{{ $ticket->id }}">
+            <label for="number-of-tickets-{{ $ticket->id }}">Number of tickets</label>
+            <input type="number" name="ticket-{{ $ticket->id }}-number" id="number-of-tickets-{{ $ticket->id }}">
         </div>
     @endforeach
 
