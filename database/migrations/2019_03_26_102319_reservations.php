@@ -18,6 +18,7 @@ class Reservations extends Migration
             $table->string('name');
             $table->string('email');
             $table->unsignedInteger('ticket_id');
+            $table->unsignedInteger('order_id');
             $table->integer('amount');
             $table->rememberToken();
             $table->timestamps();

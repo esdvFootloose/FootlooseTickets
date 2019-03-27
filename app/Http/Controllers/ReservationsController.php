@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReservationCreated;
 use App\Reservation;
 use App\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationsController extends Controller
 {
@@ -23,6 +25,11 @@ class ReservationsController extends Controller
             'email' => ['required', 'email'],
         ]);
 
+        $last_reservation = Reservation::all()->last();
+        $order_id = 0;
+        if (count($last_reservation) > 0) {
+            $order_id = $last_reservation->order_id + 1;
+        }
 
         foreach ($tickets as $ticket) {
             $name = 'ticket-'.$ticket->id;
@@ -32,10 +39,15 @@ class ReservationsController extends Controller
                     'name' => request('name'),
                     'email' => request('email'),
                     'ticket_id' => $ticket->id,
-                    'amount' => (int)request($amount)
+                    'amount' => (int)request($amount),
+                    'order_id' => $order_id
                 ]);
             }
         }
+
+        Mail::to(request('email'))->send(
+            new ReservationCreated(request('name'), $order_id)
+        );
 
         return view('success');
     }
