@@ -31,6 +31,7 @@ class ReservationsController extends Controller
             $order_id = $last_reservation->order_id + 1;
         }
 
+        $order_created = false;
         foreach ($tickets as $ticket) {
             $name = 'ticket-'.$ticket->id;
             $amount = 'ticket-'.$ticket->id.'-number';
@@ -42,7 +43,12 @@ class ReservationsController extends Controller
                     'amount' => (int)request($amount),
                     'order_id' => $order_id
                 ]);
+                $order_created = true;
             }
+        }
+
+        if (!$order_created) {
+            return redirect('/')->withErrors('Please select at least one ticket')->withInput();
         }
 
         Mail::to(request('email'))->send(
