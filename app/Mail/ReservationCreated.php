@@ -40,6 +40,6 @@ class ReservationCreated extends Mailable
      */
     public function build()
     {
-        return $this->markdown('reservation');
+        return $this->markdown('mail.reservation');
     }
 }

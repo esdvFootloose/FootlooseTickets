@@ -7,14 +7,16 @@ use Illuminate\Http\Request;
 
 class TicketsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['create']);
+    }
+
     public function index()
     {
         $tickets = Ticket::all();
-        return view('form', compact('tickets'));
+        return view('ticket.index', compact('tickets'));
     }
+
 }

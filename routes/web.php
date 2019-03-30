@@ -11,5 +11,11 @@
 |
 */
 
-Route::get('/', 'TicketsController@index');
+Route::get('/', 'ReservationsController@create');
 Route::post('/api/reservations', 'ReservationsController@store');
+Route::get('/reservations', 'ReservationsController@index');
+Route::get('/tickets', 'TicketsController@index');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

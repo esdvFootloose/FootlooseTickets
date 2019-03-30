@@ -6,14 +6,48 @@ use App\Mail\ReservationCreated;
 use App\Reservation;
 use App\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class ReservationsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['index', 'destroy', 'edit']);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $reservations = DB::table('reservations')
+            ->join('tickets', 'ticket_id', '=', 'tickets.id')
+            ->select('reservations.*', 'reservations.name', 'reservations.email', 'tickets.type', 'reservations.amount')
+            ->get();
+
+        return view('reservation.index', compact('reservations'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $tickets = Ticket::all();
+        return view('reservation.create', compact('tickets'));
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store()
@@ -33,16 +67,15 @@ class ReservationsController extends Controller
 
         $order_created = false;
         foreach ($tickets as $ticket) {
-            $name = 'ticket-'.$ticket->id;
-            $amount = 'ticket-'.$ticket->id.'-number';
-            if(request($name) == 'on'){
-                Reservation::create([
-                    'name' => request('name'),
-                    'email' => request('email'),
-                    'ticket_id' => $ticket->id,
-                    'amount' => (int)request($amount),
-                    'order_id' => $order_id
-                ]);
+            $name = 'ticket-' . $ticket->id;
+            $amount = 'ticket-' . $ticket->id . '-number';
+            if (request($name) == 'on') {
+                Reservation::create($validated +
+                    [
+                        'ticket_id' => $ticket->id,
+                        'amount' => (int)request($amount),
+                        'order_id' => $order_id
+                    ]);
                 $order_created = true;
             }
         }
