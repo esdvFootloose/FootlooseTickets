@@ -11,3 +11,9 @@ npm-debug.log
 yarn-error.log
 
 \.idea/
+
+resources/python/config\.yaml
+
+resources/python/private_footloose_dev\.pem
+
+resources/python/public_footloose_dev\.pem
