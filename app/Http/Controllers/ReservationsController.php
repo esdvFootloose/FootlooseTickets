@@ -6,8 +6,11 @@ use App\Mail\ReservationCreated;
 use App\Reservation;
 use App\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class ReservationsController extends Controller
 {
@@ -63,6 +66,7 @@ class ReservationsController extends Controller
         }
 
         $order_created = false;
+        $total = 0;
         foreach ($tickets as $ticket) {
             $name = 'ticket-' . $ticket->id;
             $amount = 'ticket-' . $ticket->id . '-number';
@@ -73,18 +77,22 @@ class ReservationsController extends Controller
                         'amount' => (int)request($amount),
                         'order_id' => $order_id
                     ]);
+                $total += (int)request($amount) * $ticket->price * 100;
                 $order_created = true;
             } else if ((int)request($amount) > 0) {
                 return redirect('/')->withErrors('Please select the tickets if an amount of tickets is entered')->withInput();
             }
         }
 
+        $description = 'Showcase Infinity tickets';
         if (!$order_created) {
             return redirect('/')->withErrors('Please select at least one ticket')->withInput();
         }
+        
+        $tikkie = json_decode(Artisan::call('tikkie:create', ['amount'=> $total, 'description' => $description, 'order_id' => $order_id]));
 
         Mail::to(request('email'))->send(
-            new ReservationCreated(request('name'), $order_id)
+            new ReservationCreated(request('name'), $order_id, $tikkie->paymentRequestUrl)
         );
 
         return view('success');

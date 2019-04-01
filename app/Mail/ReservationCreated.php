@@ -13,16 +13,17 @@ class ReservationCreated extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $name, $tickets;
+    public $name, $tickets, $payment_url;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($name, $order_id)
+    public function __construct($name, $order_id, $payment_url)
     {
         $this->name = $name;
+        $this->payment_url = $payment_url;
         $ordered_tickets = Reservation::all()->where('order_id', $order_id);
         $this->tickets = '';
 

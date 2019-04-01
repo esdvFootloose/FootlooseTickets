@@ -6,7 +6,10 @@ Dear {{ $name }},
 You have reserved the following tickets for the showcase:
 {{ $tickets }}
 
-You will soon receive payment details to finalize your reservation.
+By clicking on the following link, you can safely pay for your tickets via IDeal:
+{{ $payment_url }}
+
+After we receive confirmation of your payment, we will send you your tickets.
 
 Kind regards,<br>
 The Footloose showcase committee
