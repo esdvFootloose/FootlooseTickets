@@ -15,6 +15,7 @@ Route::get('/', 'ReservationsController@create');
 Route::post('/api/reservations', 'ReservationsController@store');
 Route::get('/reservations', 'ReservationsController@index');
 Route::get('/tickets', 'TicketsController@index');
+Route::get('reservations/download', 'ReservationsController@download');
 
 Auth::routes();
 

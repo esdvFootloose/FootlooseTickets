@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
-        <table class="table">
+        <a href="/reservations/download" class="btn btn-danger" style="margin-bottom: 1.5em; float: right">Download</a>
+
+            <table class="table">
             <thead>
             <tr>
                 <th scope="col">Ticket ID</th>

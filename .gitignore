@@ -14,6 +14,10 @@ yarn-error.log
 
 resources/python/config\.yaml
 
+resources/python/keys/private_footloose_dev\.pem
+
+resources/python/keys/public_footloose_dev\.pem
+
 resources/python/private_footloose_dev\.pem
 
 resources/python/public_footloose_dev\.pem

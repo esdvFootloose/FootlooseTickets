@@ -14,7 +14,7 @@ class ReservationsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only(['index', 'destroy', 'edit']);
+        $this->middleware('auth')->only(['index', 'destroy', 'edit', 'download']);
     }
 
     /**
@@ -24,10 +24,7 @@ class ReservationsController extends Controller
      */
     public function index()
     {
-        $reservations = DB::table('reservations')
-            ->join('tickets', 'ticket_id', '=', 'tickets.id')
-            ->select('reservations.*', 'reservations.name', 'reservations.email', 'tickets.type', 'reservations.amount')
-            ->get();
+        $reservations = $this->mergeTicketsReservations();
 
         return view('reservation.index', compact('reservations'));
     }
@@ -47,7 +44,7 @@ class ReservationsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store()
@@ -77,6 +74,8 @@ class ReservationsController extends Controller
                         'order_id' => $order_id
                     ]);
                 $order_created = true;
+            } else if ((int)request($amount) > 0) {
+                return redirect('/')->withErrors('Please select the tickets if an amount of tickets is entered')->withInput();
             }
         }
 
@@ -89,5 +88,34 @@ class ReservationsController extends Controller
         );
 
         return view('success');
+    }
+
+    public function download()
+    {
+        $reservations = $this->mergeTicketsReservations();
+        $csv = array('ID,Name,Email,Ticket,Amount');
+
+        foreach ($reservations as $entry) {
+            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->type . ',' . $entry->amount;
+        }
+
+        $filename = 'reservations-'.date('d-m-Y').".csv";
+        $file_path = base_path().'/'.$filename;
+        $file = fopen($file_path,"w+");
+        foreach ($csv as $data) {
+            fputcsv($file,explode(',', $data));
+        }
+        fclose($file);
+
+        $headers = ['Content-Type' => 'application/csv'];
+        return response()->download($file_path, $filename, $headers);
+    }
+
+    private function mergeTicketsReservations()
+    {
+        return DB::table('reservations')
+            ->join('tickets', 'ticket_id', '=', 'tickets.id')
+            ->select('reservations.*', 'reservations.name', 'reservations.email', 'tickets.type', 'reservations.amount')
+            ->get();
     }
 }
