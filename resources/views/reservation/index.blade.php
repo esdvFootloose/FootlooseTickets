@@ -12,6 +12,7 @@
                 <th scope="col">Type</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Paid</th>
+                <th scope="col">Updated at</th>
             </tr>
             </thead>
             <tbody>
@@ -23,6 +24,7 @@
                     <td>{{ $reservation->type }}</td>
                     <td>{{ $reservation->amount }}</td>
                     <td>{{ $reservation->paid ? 'yes' : 'no'}}</td>
+                    <td>{{ $reservation->updated_at }}</td>
                 </tr>
             @endforeach
             </tbody>

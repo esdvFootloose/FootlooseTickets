@@ -99,10 +99,10 @@ class ReservationsController extends Controller
     public function download()
     {
         $reservations = $this->mergeTicketsReservations();
-        $csv = array('ID,Name,Email,Ticket,Amount,Paid');
+        $csv = array('ID,Name,Email,Ticket,Amount,Paid,Last updated');
 
         foreach ($reservations as $entry) {
-            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->type . ',' . $entry->amount . ',' . $entry->paid;
+            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->type . ',' . $entry->amount . ',' . $entry->paid . ',' . $entry->updated_at;
         }
 
         $filename = 'reservations-' . date('d-m-Y') . ".csv";
@@ -121,7 +121,7 @@ class ReservationsController extends Controller
     {
         return DB::table('reservations')
             ->join('tickets', 'ticket_id', '=', 'tickets.id')
-            ->select('reservations.*', 'reservations.name', 'reservations.email', 'tickets.type', 'reservations.amount')
+            ->select('reservations.*', 'reservations.name', 'reservations.email', 'tickets.type', 'reservations.amount', 'reservations.updated_at')
             ->get();
     }
 }
