@@ -4,7 +4,7 @@
     <p>Purchase here your tickets for the footloose showcase. </p>
 
     @if ($errors->any())
-        <div class="alert alert-danger" role="alert" style="margin-top: 1em">
+        <div class="alert alert-danger mt--1m" role="alert">
             Please make sure:
             <ul>
                 @foreach ($errors->all() as $error)
@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <div class="card">
+    <div class="card border--dark-blue">
         <form method="POST" action="/api/reservations" class="card-body">
             @csrf
             <h4>Peronal details:</h4>
@@ -31,7 +31,7 @@
             </div>
             <h4>Tickets:</h4>
             @foreach($tickets as $ticket)
-                <div class="card" style="margin-bottom: 1em;">
+                <div class="card border--light-blue mb--1m">
                     <div class="card-body">
                         <div class="form-group">
                             <label for="ticket-{{ $ticket->id }}">{{ $ticket->type }} ticket</label>
@@ -46,9 +46,12 @@
                     </div>
                 </div>
             @endforeach
-
-            <button class="btn btn-danger" type="submit" style="margin-top: 2em">Submit</button>
+            <button class="btn button--pink mt--2m" type="submit">Submit</button>
+            <div class="text--center">
+                <img src="img/logo.png" class="logo">
+            </div>
         </form>
+
     </div>
 
 

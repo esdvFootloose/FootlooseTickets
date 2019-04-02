@@ -1,14 +1,69 @@
-
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 // Variables
 @import 'variables';
-
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+$dark-blue: #2895b9;
+$light-blue: #59eee2;
+$pink: #bf0099;
+
+html {
+  margin: 2em;
+}
+
 
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.border {
+  &--dark-blue {
+    border: 1px solid $dark-blue;
+  }
+
+  &--light-blue {
+    border: 1px solid $light-blue;
+  }
+}
+
+.button {
+  &--pink {
+    border: 1px solid $pink;
+    background-color: $pink;
+    color: white;
+  }
+}
+
+.logo {
+  height: 250px;
+  width: auto;
+}
+
+h1 {
+  color: $dark-blue;
+}
+
+h4 {
+  color: $pink;
+}
+
+.mt {
+  &--1m {
+    margin-top: 1em;
+  }
+
+  &--2m {
+    margin-top: 2em;
+  }
+}
+
+.mb--1m {
+  margin-bottom: 1em;
+}
+
+.text--center {
+  text-align: center;
 }
