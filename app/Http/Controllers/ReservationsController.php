@@ -29,17 +29,7 @@ class ReservationsController extends Controller
     {
         $reservations = $this->mergeTicketsReservations();
 
-        $paid = json_decode(Artisan::call('tikkie:get', []))->paymentRequests;
-        $paid = collect($paid);
-
-        foreach ($reservations as $reservation) {
-            if ($reservation->paid == 0) {
-                $external_id = 'ticket-'.$reservation->order_id;
-                $tikkie = $paid->where('externalId', '=', $external_id)->first();
-                $payment = collect($tikkie->payments)->where('onlinePaymentStatus', '=', 'PAID')->first();
-                $reservation->paid = empty($payment) ? false : true;
-            }
-        }
+        Artisan::call('tikkie:get', []);
 
         return view('reservation.index', compact('reservations'));
     }
