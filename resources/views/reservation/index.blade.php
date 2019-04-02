@@ -11,6 +11,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Type</th>
                 <th scope="col">Amount</th>
+                <th scope="col">Paid</th>
             </tr>
             </thead>
             <tbody>
@@ -21,6 +22,7 @@
                     <td>{{ $reservation->email }}</td>
                     <td>{{ $reservation->type }}</td>
                     <td>{{ $reservation->amount }}</td>
+                    <td>{{ $reservation->paid ? 'yes' : 'no'}}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -29,6 +29,18 @@ class ReservationsController extends Controller
     {
         $reservations = $this->mergeTicketsReservations();
 
+        $paid = json_decode(Artisan::call('tikkie:get', []))->paymentRequests;
+        $paid = collect($paid);
+
+        foreach ($reservations as $reservation) {
+            if ($reservation->paid == 0) {
+                $external_id = 'ticket-'.$reservation->order_id;
+                $tikkie = $paid->where('externalId', '=', $external_id)->first();
+                $payment = collect($tikkie->payments)->where('onlinePaymentStatus', '=', 'PAID')->first();
+                $reservation->paid = empty($payment) ? false : true;
+            }
+        }
+
         return view('reservation.index', compact('reservations'));
     }
 
@@ -88,8 +100,8 @@ class ReservationsController extends Controller
         if (!$order_created) {
             return redirect('/')->withErrors('Please select at least one ticket')->withInput();
         }
-        
-        $tikkie = json_decode(Artisan::call('tikkie:create', ['amount'=> $total, 'description' => $description, 'order_id' => $order_id]));
+
+        $tikkie = json_decode(Artisan::call('tikkie:create', ['amount' => $total, 'description' => $description, 'order_id' => $order_id]));
 
         Mail::to(request('email'))->send(
             new ReservationCreated(request('name'), $order_id, $tikkie->paymentRequestUrl)
@@ -101,17 +113,17 @@ class ReservationsController extends Controller
     public function download()
     {
         $reservations = $this->mergeTicketsReservations();
-        $csv = array('ID,Name,Email,Ticket,Amount');
+        $csv = array('ID,Name,Email,Ticket,Amount,Paid');
 
         foreach ($reservations as $entry) {
-            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->type . ',' . $entry->amount;
+            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->type . ',' . $entry->amount . ',' . $entry->paid;
         }
 
-        $filename = 'reservations-'.date('d-m-Y').".csv";
-        $file_path = base_path().'/'.$filename;
-        $file = fopen($file_path,"w+");
+        $filename = 'reservations-' . date('d-m-Y') . ".csv";
+        $file_path = base_path() . '/' . $filename;
+        $file = fopen($file_path, "w+");
         foreach ($csv as $data) {
-            fputcsv($file,explode(',', $data));
+            fputcsv($file, explode(',', $data));
         }
         fclose($file);
 

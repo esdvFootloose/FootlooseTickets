@@ -20,6 +20,7 @@ class Reservations extends Migration
             $table->unsignedInteger('ticket_id');
             $table->unsignedInteger('order_id');
             $table->integer('amount');
+            $table->boolean('paid')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
