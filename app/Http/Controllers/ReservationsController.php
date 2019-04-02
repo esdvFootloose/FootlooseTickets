@@ -91,11 +91,7 @@ class ReservationsController extends Controller
             return redirect('/')->withErrors('Please select at least one ticket')->withInput();
         }
 
-        $tikkie = json_decode(Artisan::call('tikkie:create', ['amount' => $total, 'description' => $description, 'order_id' => $order_id]));
-
-        Mail::to(request('email'))->send(
-            new ReservationCreated(request('name'), $order_id, $tikkie->paymentRequestUrl)
-        );
+        Artisan::call('tikkie:create', ['amount' => $total, 'description' => $description, 'order_id' => $order_id]);
 
         return view('success');
     }

@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\ReservationCreated;
+use App\Reservation;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -55,6 +58,13 @@ class CreateTikkie extends Command
             throw new ProcessFailedException($process);
         }
 
-        return $process->getOutput();
+        $order = Reservation::where('order_id', $order_id)->first();
+        $payment_url = json_decode($process->getOutput())->paymentRequestUrl;
+
+        Mail::to($order->email)->send(
+            new ReservationCreated($order->name, $order_id, $payment_url)
+        );
+
+        return true;
     }
 }
