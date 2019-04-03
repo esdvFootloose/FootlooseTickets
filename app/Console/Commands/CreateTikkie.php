@@ -45,7 +45,7 @@ class CreateTikkie extends Command
      */
     public function handle()
     {
-        $amount = $this->argument('amount');
+        $amount = $this->argument('amount') + 25;
         $description = $this->argument('description');
         $order_id = $this->argument('order_id');
 

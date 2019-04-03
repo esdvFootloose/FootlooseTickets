@@ -30,6 +30,7 @@
                        required>
             </div>
             <h4>Tickets:</h4>
+            <p>Please note the the ticket prices are excluded transaction costs of €0,25</p>
             @foreach($tickets as $ticket)
                 <div class="card border--light-blue mb--1m">
                     <div class="card-body">
