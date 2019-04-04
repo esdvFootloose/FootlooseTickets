@@ -17,7 +17,7 @@
     <div class="card border--dark-blue">
         <form method="POST" action="/api/reservations" class="card-body">
             @csrf
-            <h4>Peronal details:</h4>
+            <h4>Personal details:</h4>
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name"

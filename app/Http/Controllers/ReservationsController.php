@@ -73,6 +73,9 @@ class ReservationsController extends Controller
             $name = 'ticket-' . $ticket->id;
             $amount = 'ticket-' . $ticket->id . '-number';
             if (request($name) == 'on') {
+                if ((int)request($amount) <= 0) {
+                    return redirect('/')->withErrors('Please enter a positive number tickets')->withInput();
+                }
                 Reservation::create($validated +
                     [
                         'ticket_id' => $ticket->id,
