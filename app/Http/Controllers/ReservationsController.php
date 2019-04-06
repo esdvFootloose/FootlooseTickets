@@ -62,8 +62,8 @@ class ReservationsController extends Controller
         ]);
 
         $last_reservation = Reservation::all()->last();
-        $order_id = 0;
-        if (count($last_reservation) > 0) {
+	$order_id = 0;
+        if (isset($last_reservation)) {
             $order_id = $last_reservation->order_id + 1;
         }
 
