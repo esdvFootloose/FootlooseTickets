@@ -34,6 +34,7 @@
             @foreach($tickets as $ticket)
                 <div class="card border--light-blue mb--1m">
                     <div class="card-body">
+                        <h5>{{ $ticket->show_time }}</h5>
                         <div class="form-group">
                             <label for="ticket-{{ $ticket->id }}">{{ $ticket->type }} ticket</label>
                             <input type="checkbox" class="form-control-input" name="ticket-{{ $ticket->id }}"
