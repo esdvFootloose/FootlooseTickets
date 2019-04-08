@@ -10,9 +10,11 @@
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Type</th>
+                <th scope="col">Time</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Paid</th>
                 <th scope="col">Updated at</th>
+
             </tr>
             </thead>
             <tbody>
