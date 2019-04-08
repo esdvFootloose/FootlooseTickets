@@ -11,6 +11,8 @@ Please print this mail and bring it to the performance on the 10th of June to th
 Elzentlaan 50<br>
 5615 CN Eindhoven<br>
 
+Students also need to bring their student ID with them<br>
+
 
 We will see you at the showcase,<br>
 Kind regards,<br>
