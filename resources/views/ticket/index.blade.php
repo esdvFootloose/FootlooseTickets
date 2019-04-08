@@ -7,6 +7,7 @@
                 <th scope="col">Ticket ID</th>
                 <th scope="col">Type</th>
                 <th scope="col">Price</th>
+                <th scope="col">Time</th>
             </tr>
             </thead>
             <tbody>
@@ -15,6 +16,7 @@
                     <th scope="row">{{ $ticket->id }}</th>
                     <td>{{ $ticket->type }}</td>
                     <td>€{{ $ticket->price }}</td>
+                    <td>{{ $ticket->show_time }}</td>
                 </tr>
             @endforeach
             </tbody>
