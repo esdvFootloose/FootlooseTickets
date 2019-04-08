@@ -102,10 +102,10 @@ class ReservationsController extends Controller
     public function download()
     {
         $reservations = $this->mergeTicketsReservations();
-        $csv = array('ID,Name,Email,Ticket,Amount,Paid,Last updated');
+        $csv = array('ID,Name,Email,Ticket,Time,Amount,Paid,Last updated');
 
         foreach ($reservations as $entry) {
-            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->type . ',' . $entry->amount . ',' . $entry->paid . ',' . $entry->updated_at;
+            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->type . ',' . $entry->show_time . ',' . $entry->amount . ',' . $entry->paid . ',' . $entry->updated_at;
         }
 
         $filename = 'reservations-' . date('d-m-Y') . ".csv";
@@ -124,7 +124,7 @@ class ReservationsController extends Controller
     {
         return DB::table('reservations')
             ->join('tickets', 'ticket_id', '=', 'tickets.id')
-            ->select('reservations.*', 'reservations.name', 'reservations.email', 'tickets.type', 'reservations.amount', 'reservations.updated_at')
+            ->select('reservations.*', 'reservations.name', 'reservations.email', 'tickets.type', 'tickets.show_time', 'reservations.amount', 'reservations.updated_at')
             ->get();
     }
 }

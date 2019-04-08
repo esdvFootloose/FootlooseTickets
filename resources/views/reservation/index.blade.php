@@ -22,6 +22,7 @@
                     <td>{{ $reservation->name }}</td>
                     <td>{{ $reservation->email }}</td>
                     <td>{{ $reservation->type }}</td>
+                    <td>{{ $reservation->show_time }}</td>
                     <td>{{ $reservation->amount }}</td>
                     <td>{{ $reservation->paid ? 'yes' : 'no'}}</td>
                     <td>{{ $reservation->updated_at }}</td>
