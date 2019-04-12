@@ -125,6 +125,7 @@ class ReservationsController extends Controller
         return DB::table('reservations')
             ->join('tickets', 'ticket_id', '=', 'tickets.id')
             ->select('reservations.*', 'reservations.name', 'reservations.email', 'tickets.type', 'tickets.show_time', 'reservations.amount', 'reservations.updated_at')
+            ->orderBy('reservations.id')
             ->get();
     }
 }
