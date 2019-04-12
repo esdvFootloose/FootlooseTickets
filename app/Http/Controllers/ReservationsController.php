@@ -41,7 +41,7 @@ class ReservationsController extends Controller
      */
     public function create()
     {
-        $tickets = Ticket::all();
+        $tickets = Ticket::all()->sortBy('show_time');
         return view('reservation.create', compact('tickets'));
     }
 
