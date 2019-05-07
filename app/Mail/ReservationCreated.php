@@ -28,8 +28,8 @@ class ReservationCreated extends Mailable
         $this->tickets = '';
 
         foreach ($ordered_tickets as $ticket) {
-            $type = Ticket::all()->where('id', $ticket->ticket_id)->last()->type;
-            $this->tickets = $this->tickets.'- '.$ticket->amount.'x '.$type."
+            $ordered_ticket = Ticket::all()->where('id', $ticket->ticket_id)->last();
+            $this->tickets = $this->tickets.'- '.$ticket->amount.'x '.$ordered_ticket->type. ' at: '.$ordered_ticket->show_time."
 ";
         }
     }

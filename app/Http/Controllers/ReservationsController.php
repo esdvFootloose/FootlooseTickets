@@ -17,7 +17,7 @@ class ReservationsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only(['index', 'destroy', 'edit', 'download']);
+        $this->middleware('auth')->only(['index', 'destroy', 'edit', 'download', 'createNewTikkie']);
     }
 
     /**
@@ -41,7 +41,7 @@ class ReservationsController extends Controller
      */
     public function create()
     {
-        $tickets = Ticket::all()->sortBy('show_time');
+        $tickets = Ticket::all()->sortBy('show_time')->sortBy('type');
         return view('reservation.create', compact('tickets'));
     }
 
@@ -62,7 +62,7 @@ class ReservationsController extends Controller
         ]);
 
         $last_reservation = Reservation::all()->last();
-	$order_id = 0;
+        $order_id = 0;
         if (isset($last_reservation)) {
             $order_id = $last_reservation->order_id + 1;
         }
@@ -118,6 +118,21 @@ class ReservationsController extends Controller
 
         $headers = ['Content-Type' => 'application/csv'];
         return response()->download($file_path, $filename, $headers);
+    }
+
+    public function createNewTikkie($order_id)
+    {
+        $total = 0;
+        $description = 'Showcase Infinity tickets';
+
+        $reserved_tickets = Reservation::all()->where('order_id', $order_id);
+
+        foreach ($reserved_tickets as $ticket) {
+            $total += Ticket::where('id', $ticket->ticket_id)->first()->price * $ticket->amount;
+        }
+
+        Artisan::call('tikkie:create', ['amount' => $total, 'description' => $description, 'order_id' => $order_id]);
+        return redirect('/reservations');
     }
 
     private function mergeTicketsReservations()
