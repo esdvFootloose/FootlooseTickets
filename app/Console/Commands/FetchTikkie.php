@@ -62,6 +62,9 @@ class FetchTikkie extends Command
                 $external_id = 'ticket-' . $reservation->order_id;
                 $tikkie = $paid->where('externalId', '=', $external_id)->first();
                 if (!$reservation->tikkie_link) {
+                    if (!$tikkie ) {
+                        continue;
+                    }
                     if ($tikkie->status == 'OPEN') {
                         $reservation->tikkie_link = "https://tikkie.me/pay/" . $tikkie->paymentRequestToken;
                         $reservation->save();
