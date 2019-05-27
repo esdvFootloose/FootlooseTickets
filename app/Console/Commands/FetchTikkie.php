@@ -55,7 +55,7 @@ class FetchTikkie extends Command
         $paid = json_decode($process->getOutput())->paymentRequests;
         $paid = collect($paid);
 
-        $reservations = Reservation::where('paid', '=', 0)->get();
+        $reservations = Reservation::all();
 
         foreach ($reservations as $reservation) {
             if ($reservation->paid == 0) {
@@ -66,28 +66,28 @@ class FetchTikkie extends Command
                         continue;
                     }
                     if ($tikkie->status == 'OPEN') {
-                        $reservation->tikkie_link = "https://tikkie.me/pay/" . $tikkie->paymentRequestToken;
+                        $reservation->tikkie_link = "https://tikkie.me/pay/Footloose/" . $tikkie->paymentRequestToken;
                         $reservation->save();
                     }
+                }
+
+                $payment = collect($tikkie->payments)->where('onlinePaymentStatus', '=', 'PAID')->first();
+                if (!empty($payment)) {
+                    $ordered = $reservations->where('order_id', $reservation->order_id);
+                    foreach ($ordered as $order) {
+                        $order->paid = true;
+                        $order->save();
+                    }
+                    $updated_at = $reservations->first()->updated_at;
+                    Mail::to($reservation->email)->send(
+                        new ReservationConfirmed($reservation->name, $reservation->order_id, $updated_at)
+                    );
                 }
             } else {
                 if ($reservation->tikkie_link) {
                     $reservation->tikkie_link = '';
                     $reservation->save();
                 }
-            }
-
-            $payment = collect($tikkie->payments)->where('onlinePaymentStatus', '=', 'PAID')->first();
-            if (!empty($payment)) {
-                $ordered = $reservations->where('order_id', $reservation->order_id);
-                foreach ($ordered as $order) {
-                    $order->paid = true;
-                    $order->save();
-                }
-                $updated_at = $reservations->first()->updated_at;
-                Mail::to($reservation->email)->send(
-                    new ReservationConfirmed($reservation->name, $reservation->order_id, $updated_at)
-                );
             }
         }
     }
