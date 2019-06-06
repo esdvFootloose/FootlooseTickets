@@ -55,7 +55,7 @@ class FetchTikkie extends Command
         $paid = json_decode($process->getOutput())->paymentRequests;
         $paid = collect($paid);
 
-        $reservations = Reservation::all();
+        $reservations = Reservation::where('paid', 0)->get();
 
         foreach ($reservations as $reservation) {
             if ($reservation->paid == 0) {
