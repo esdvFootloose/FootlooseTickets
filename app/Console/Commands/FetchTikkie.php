@@ -55,7 +55,7 @@ class FetchTikkie extends Command
         $paid = json_decode($process->getOutput())->paymentRequests;
         $paid = collect($paid);
 
-        $reservations = Reservation::where('paid', 0)->get();
+        $reservations = Reservation::all();
 
         foreach ($reservations as $reservation) {
             if ($reservation->paid == 0) {
@@ -68,6 +68,7 @@ class FetchTikkie extends Command
                     if ($tikkie->status == 'OPEN') {
                         $reservation->tikkie_link = "https://tikkie.me/pay/Footloose/" . $tikkie->paymentRequestToken;
                         $reservation->save();
+                        $paid->forget($tikkie);
                     }
                 }
 
