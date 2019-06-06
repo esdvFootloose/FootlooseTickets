@@ -27,9 +27,9 @@ class ReservationsController extends Controller
      */
     public function index()
     {
-        $reservations = $this->mergeTicketsReservations();
-
         Artisan::call('tikkie:get', []);
+
+        $reservations = $this->mergeTicketsReservations();
 
         return view('reservation.index', compact('reservations'));
     }
