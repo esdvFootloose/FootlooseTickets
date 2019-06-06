@@ -62,28 +62,33 @@ class FetchTikkie extends Command
                 $external_id = 'ticket-' . $reservation->order_id;
                 $tikkie = $paid->where('externalId', '=', $external_id)->first();
                 if (!$reservation->tikkie_link) {
-                    if (!$tikkie ) {
+                    if (!$tikkie) {
                         continue;
                     }
                     if ($tikkie->status == 'OPEN') {
                         $reservation->tikkie_link = "https://tikkie.me/pay/Footloose/" . $tikkie->paymentRequestToken;
                         $reservation->save();
-                        $paid->forget($tikkie);
+//                        $paid->forget($tikkie);
                     }
                 }
 
-                $payment = collect($tikkie->payments)->where('onlinePaymentStatus', '=', 'PAID')->first();
-                if (!empty($payment)) {
-                    $ordered = $reservations->where('order_id', $reservation->order_id);
-                    foreach ($ordered as $order) {
-                        $order->paid = true;
-                        $order->save();
+                if (empty($tikkie->payments)) {
+                    continue;
+                } else {
+                    $payment = collect($tikkie->payments)->where('onlinePaymentStatus', '=', 'PAID')->first();
+                    if (!empty($payment)) {
+                        $ordered = $reservations->where('order_id', $reservation->order_id);
+                        foreach ($ordered as $order) {
+                            $order->paid = true;
+                            $order->save();
+                        }
+                        $updated_at = $reservations->first()->updated_at;
+                        Mail::to($reservation->email)->send(
+                            new ReservationConfirmed($reservation->name, $reservation->order_id, $updated_at)
+                        );
                     }
-                    $updated_at = $reservations->first()->updated_at;
-                    Mail::to($reservation->email)->send(
-                        new ReservationConfirmed($reservation->name, $reservation->order_id, $updated_at)
-                    );
                 }
+
             } else {
                 if ($reservation->tikkie_link) {
                     $reservation->tikkie_link = '';
