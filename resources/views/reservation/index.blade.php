@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <a href="/reservations/download" class="btn btn-danger" style="margin-bottom: 1.5em; float: right">Download</a>
-        <table class="table">
+        <table class="table table-responsive">
             <thead>
             <tr>
                 <th scope="col">Ticket ID</th>
