@@ -61,17 +61,16 @@ class FetchTikkie extends Command
             if ($reservation->paid == 0) {
                 $external_id = 'ticket-' . $reservation->order_id;
                 $tikkie = $paid->where('externalId', '=', $external_id)->first();
-                if (!$reservation->tikkie_link) {
-                    if (!$tikkie) {
-                        continue;
-                    }
-                    if ($tikkie->status == 'OPEN') {
+
+                if (!$tikkie) {
+                    continue;
+                } else {
+                    if ($reservation->tikkie_link == null && $tikkie->status == 'OPEN') {
                         $reservation->tikkie_link = "https://tikkie.me/pay/Footloose/" . $tikkie->paymentRequestToken;
                         $reservation->save();
                     }
-                } else {
-                    if ($tikkie->status == 'EXPIRED') {
-                        $reservation->tikkie_link =  null;
+                    if (!$reservation->tikkie_link == null && $tikkie->status == 'EXPIRED') {
+                        $reservation->tikkie_link = null;
                         $reservation->save();
                     }
                 }
