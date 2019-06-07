@@ -69,7 +69,13 @@ class FetchTikkie extends Command
                         $reservation->tikkie_link = "https://tikkie.me/pay/Footloose/" . $tikkie->paymentRequestToken;
                         $reservation->save();
                     }
+                } else {
+                    if ($tikkie->status == 'EXPIRED') {
+                        $reservation->tikkie_link =  null;
+                        $reservation->save();
+                    }
                 }
+
 
                 if (empty($tikkie->payments)) {
                     continue;
