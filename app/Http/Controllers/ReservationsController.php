@@ -128,7 +128,7 @@ class ReservationsController extends Controller
         $reserved_tickets = Reservation::all()->where('order_id', $order_id);
 
         foreach ($reserved_tickets as $ticket) {
-            $total += Ticket::where('id', $ticket->ticket_id)->first()->price * $ticket->amount;
+            $total += Ticket::where('id', $ticket->ticket_id)->first()->price * $ticket->amount*100;
         }
 
         Artisan::call('tikkie:create', ['amount' => $total, 'description' => $description, 'order_id' => $order_id]);
