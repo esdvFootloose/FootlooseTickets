@@ -11,11 +11,16 @@
 |
 */
 
-Route::get('/', 'ReservationsController@create');
+Route::get('/tickets', 'ReservationsController@create');
+Route::get('/', 'USBReservationController@create');
 Route::post('/api/reservations', 'ReservationsController@store');
+Route::post('/api/reservations/film', 'USBReservationController@store');
 Route::get('/reservations', 'ReservationsController@index');
+Route::get('/reservations/film', 'USBReservationController@index');
 Route::get('/tickets', 'TicketsController@index');
 Route::get('reservations/download', 'ReservationsController@download');
+Route::get('reservations/film/download', 'USBReservationController@download');
+
 Route::get('/reservations/newTikkie/{order_id}', 'ReservationsController@createNewTikkie');
 
 Auth::routes();
