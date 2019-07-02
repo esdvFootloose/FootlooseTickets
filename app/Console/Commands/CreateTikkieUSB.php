@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\USBReservationController;
 use App\Mail\ReservationCreated;
+use App\Mail\ReservationUSBCreated;
 use App\usbreservation;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -52,7 +53,7 @@ class CreateTikkieUSB extends Command
 
         $path = base_path()."/resources/python/";
 
-        $process = new Process("cd {$path} && python3 cli.py --mode request --amount {$amount} --description '{$description}' --externalid 'ticket-'{$order_id}");
+        $process = new Process("cd {$path} && python3 cli.py --mode request --amount {$amount} --description '{$description}' --externalid 'usb-'{$order_id}");
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -63,7 +64,7 @@ class CreateTikkieUSB extends Command
         $payment_url = json_decode($process->getOutput())->paymentRequestUrl;
 
         Mail::to($order->email)->send(
-            new ReservationCreated($order->name, $order_id, $payment_url)
+            new ReservationUSBCreated($order->name, $order_id, $payment_url)
         );
 
         return true;

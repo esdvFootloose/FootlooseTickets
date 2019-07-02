@@ -15,7 +15,7 @@
     @endif
 
     <div class="card border--dark-blue">
-        <form method="POST" action="/api/reservations/film" class="card-body">
+        <form method="POST" action="/api/reservations/movie" class="card-body">
             @csrf
             <h4>Personal details:</h4>
             <div class="form-group">

@@ -19,6 +19,7 @@ class CreateUsbReservationTable extends Migration
             $table->string('email');
             $table->integer('amount');
             $table->boolean('paid')->default(false);
+            $table->boolean('picked_up')->default(false);
             $table->string('tikkie_link')->nullable();
             $table->timestamps();
         });

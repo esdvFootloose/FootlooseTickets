@@ -53,7 +53,7 @@
                             <a class="nav-link" href="/reservations">Reservations</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/reservations/film">Film</a>
+                            <a class="nav-link" href="/reservations/movie">Film</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/tickets">Tickets</a>

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReservationUSBPickup;
 use App\usbreservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 
 class USBReservationController extends Controller
 
 {
     public function __construct()
     {
-        $this->middleware('auth')->only(['index', 'destroy', 'edit', 'download', 'createNewTikkie']);
+        $this->middleware('auth')->only(['index', 'destroy', 'edit', 'download', 'createNewTikkie', 'pickup']);
     }
 
     /**
@@ -21,7 +23,7 @@ class USBReservationController extends Controller
      */
     public function index()
     {
-        Artisan::call('tikkie:get', []);
+        Artisan::call('tikkie:getUSB', []);
 
         $reservations = usbreservation::all();
 
@@ -49,7 +51,7 @@ class USBReservationController extends Controller
         $validated = request()->validate([
             'name' => ['required', 'min:4'],
             'email' => ['required', 'email'],
-            'amount' => ['required', 'int'],
+            'amount' => ['required', 'gt:0'],
         ]);
 
         $order = usbreservation::create($validated);
@@ -64,23 +66,32 @@ class USBReservationController extends Controller
 
     public function createNewTikkie($id)
     {
-        $total = 0;
         $description = 'Showcase Infinity film';
 
-        $reserved_tickets = Reservation::where('id', $id)->first();
+        $reserved_tickets = usbreservation::where('id', $id)->first();
         $total = $reserved_tickets->amount * 2 * 100;
 
-        Artisan::call('tikkie:create', ['amount' => $total, 'description' => $description, 'order_id' => $id]);
+        Artisan::call('tikkie:createUSB', ['amount' => $total, 'description' => $description, 'order_id' => $id]);
         return redirect('/reservations');
+    }
+
+    public function pickup($id)
+    {
+        $reservation = usbreservation::where('id', $id)->first();
+
+        $reservation->picked_up = true;
+        $reservation->save();
+
+        return redirect('/reservations/movie');
     }
 
     public function download()
     {
         $reservations = usbreservation::all();
-        $csv = array('ID,Name,Email,Amount,Paid,Last updated');
+        $csv = array('ID,Name,Email,Amount,Paid,Picked up,Last updated');
 
         foreach ($reservations as $entry) {
-            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->amount . ',' . $entry->paid . ',' . $entry->updated_at;
+            $csv[] = $entry->id . ',' . $entry->name . ',' . $entry->email . ',' . $entry->amount . ',' . $entry->paid . ',' . $entry->picked_up . ',' . $entry->updated_at;
         }
 
         $filename = 'reservations-usb-' . date('d-m-Y') . ".csv";

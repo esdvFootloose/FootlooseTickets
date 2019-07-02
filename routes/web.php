@@ -14,15 +14,17 @@
 Route::get('/tickets', 'ReservationsController@create');
 Route::get('/', 'USBReservationController@create');
 Route::post('/api/reservations', 'ReservationsController@store');
-Route::post('/api/reservations/film', 'USBReservationController@store');
+Route::post('/api/reservations/movie', 'USBReservationController@store');
 Route::get('/reservations', 'ReservationsController@index');
-Route::get('/reservations/film', 'USBReservationController@index');
+Route::get('/reservations/movie', 'USBReservationController@index');
 Route::get('/tickets', 'TicketsController@index');
 Route::get('reservations/download', 'ReservationsController@download');
-Route::get('reservations/film/download', 'USBReservationController@download');
+Route::get('reservations/movie/download', 'USBReservationController@download');
 
 Route::get('/reservations/newTikkie/{order_id}', 'ReservationsController@createNewTikkie');
 
-Auth::routes();
+Route::get('/reservations/movie/pickup/{id}', 'USBReservationController@pickup');
+
+Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');

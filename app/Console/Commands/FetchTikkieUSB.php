@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Mail\ReservationConfirmed;
+use App\Mail\ReservationUSBConfirmed;
 use App\Reservation;
+use App\usbreservation;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -55,11 +57,11 @@ class FetchTikkieUSB extends Command
         $paid = json_decode($process->getOutput())->paymentRequests;
         $paid = collect($paid);
 
-        $reservations = Reservation::all();
+        $reservations = usbreservation::all();
 
         foreach ($reservations as $reservation) {
             if ($reservation->paid == 0) {
-                $external_id = 'ticket-' . $reservation->order_id;
+                $external_id = 'usb-' . $reservation->id;
                 $tikkie = $paid->where('externalId', '=', $external_id)->first();
 
                 if (!$tikkie) {
@@ -88,7 +90,7 @@ class FetchTikkieUSB extends Command
                         }
                         $updated_at = $reservations->first()->updated_at;
                         Mail::to($reservation->email)->send(
-                            new ReservationConfirmed($reservation->name, $reservation->order_id, $updated_at)
+                            new ReservationUSBConfirmed($reservation->name, $reservation->id)
                         );
                     }
                 }
