@@ -27,6 +27,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command('tikkie:get')->everyFifteenMinutes();
+        $schedule->command('tikkie:getUSB')->everyFifteenMinutes();
+
     }
 
     /**
