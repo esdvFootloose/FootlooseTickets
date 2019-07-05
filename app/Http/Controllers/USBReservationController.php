@@ -13,7 +13,7 @@ class USBReservationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only(['index', 'destroy', 'edit', 'download', 'createNewTikkie', 'pickup']);
+        $this->middleware('auth')->only(['index', 'destroy', 'edit', 'download', 'createNewTikkie', 'pickup', 'reset']);
     }
 
     /**
@@ -43,7 +43,7 @@ class USBReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -104,5 +104,16 @@ class USBReservationController extends Controller
 
         $headers = ['Content-Type' => 'application/csv'];
         return response()->download($file_path, $filename, $headers);
+    }
+
+    public function reset()
+    {
+        $reservations = usbreservation::where('picked_up', 1);
+
+        foreach ($reservations as $reservation) {
+            $reservation->picked_up = 0;
+            $reservation->save();
+        }
+        return redirect('/reservations/movie');
     }
 }
