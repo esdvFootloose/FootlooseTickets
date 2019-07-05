@@ -108,7 +108,7 @@ class USBReservationController extends Controller
 
     public function reset()
     {
-        $reservations = usbreservation::where('picked_up', 1);
+        $reservations = usbreservation::where('picked_up', 1)->all();
 
         foreach ($reservations as $reservation) {
             $reservation->picked_up = 0;
